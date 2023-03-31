@@ -11,77 +11,29 @@
 #include "Tuple.h"
 #include "Relation.h"
 #include "Interpreter.h"
+#include "Node.h"
+#include "Graph.h"
 #include <iostream>
 #include <fstream>
 
-int main (int argc, char* argv[]) {
-    ifstream f;
-    f.open(argv[1]);
-
-    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
-
-    Scanner s = Scanner(content);
-    vector<Token> t = s.scanLoop();
-
-    Parser p = Parser(t);
-
-    try {
-        DatalogProgram dp = p.datalogProgram();
-        Interpreter i = Interpreter(dp);
-        cout << "Rule Evaluation" << endl;
-        i.evaluateAllFacts();
-
-        cout << "Query Evaluation" << endl;
-        i.evaluateAllQueries();
-    }
-    catch (Token error) {
-//        cout << "Failure!" << endl;
-//        cout << "  " << error.toString() << endl;
-    }
-    return 0;
+int main() {
+    Graph graph(3);
+    graph.addEdge(1,2);
+    graph.addEdge(1,0);
+    graph.addEdge(0,1);
+    graph.addEdge(1,1);
+    cout << graph.toString();
 }
 
-//int main() { // Part 2
-//    Relation studentRelation("students", Scheme( {"ID", "Name", "Major"} ));
-//    vector<string> studentValues[] = {
-//            {"'42'", "'Ann'", "'CS'"},
-//            {"'64'", "'Ned'", "'EE'"},
-//    };
-//    studentRelation.join(studentRelation);
-//
-//    Relation courseRelation("courses", Scheme( {"ID", "Course"} ));
-//    vector<string> courseValues[] = {
-//            {"'42'", "'CS 100'"},
-//            {"'32'", "'CS 232'"},
-//    };
-//
-//    for (auto& value : studentValues)
-//        studentRelation.addTuple(Tuple(value));
-//    for (auto& value : courseValues)
-//        courseRelation.addTuple(Tuple(value));
-//
-//    studentRelation.join(courseRelation);
-//}
-
 //int main() { // Part 1
-//
-//    Scheme scheme1( { "A", "B" } );
-//    Scheme scheme2( { "B", "C" } );
-//    Scheme scheme3( { "X", "Y" } );
-//    Scheme scheme4( { "X", "Y", "Z" } );
-//
-//    Tuple tuple1( {"'1'", "'2'"} );
-//    Tuple tuple2( {"'3'", "'4'"} );
-//    Tuple tuple3( {"'1'", "'4'"} );
-//    Tuple tuple4( {"'1'", "'2'", "'4'"} );
-//
-//    cout << Relation::joinable(scheme1, scheme2, tuple1, tuple2) << endl << endl;
-//    cout << Relation::joinable(scheme2, scheme3, tuple1, tuple2) << endl << endl;
-//    cout << Relation::joinable(scheme3, scheme4, tuple1, tuple4) << endl << endl;
-//    cout << Relation::joinable(scheme3, scheme4, tuple3, tuple4) << endl;
+//    Node node;
+//    node.addEdge(4);
+//    node.addEdge(8);
+//    node.addEdge(2);
+//    cout << node.toString() << endl;
 //}
 
-//int main (int argc, char* argv[]) { // End of project 3
+//int main (int argc, char* argv[]) { // End of project 4
 //    ifstream f;
 //    f.open(argv[1]);
 //
@@ -95,7 +47,10 @@ int main (int argc, char* argv[]) {
 //    try {
 //        DatalogProgram dp = p.datalogProgram();
 //        Interpreter i = Interpreter(dp);
+//        cout << "Rule Evaluation" << endl;
+//        i.evaluateAllFacts();
 //
+//        cout << "Query Evaluation" << endl;
 //        i.evaluateAllQueries();
 //    }
 //    catch (Token error) {
@@ -104,4 +59,3 @@ int main (int argc, char* argv[]) {
 //    }
 //    return 0;
 //}
-//
