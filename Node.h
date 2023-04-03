@@ -26,6 +26,9 @@ public:
         for (int i : adjacentNodeIDs) {
         output += "R" + to_string(i) + ",";
         }
+        output = output.substr(0, output.size() - 1);
+        output += "\n";
+
         return output;
     }
 };

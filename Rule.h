@@ -12,9 +12,11 @@ using namespace std;
 class Rule
 {
 public:
+    Rule() {}
+    Rule(Predicate headPredicate)
+            : headPredicate(headPredicate) {}
     Rule(Predicate headPredicate, vector<Predicate> predicateList)
             : headPredicate(headPredicate), predicateList(predicateList) {}
-    Rule(){}
 
     Predicate headPredicate;
     vector<Predicate> predicateList;
@@ -31,6 +33,16 @@ public:
 
         return output.str();
     }
+
+    Rule addBodyPredicate(Predicate predicate) {
+        predicateList.push_back(predicate);
+        return *this;
+    }
+
+    Rule getBodyPredicate() {
+        return *this;
+    }
+
 
 private:
     string value;

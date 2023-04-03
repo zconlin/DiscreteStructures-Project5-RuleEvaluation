@@ -8,6 +8,7 @@
 #include "Database.h"
 #include "parser.h"
 #include "Predicate.h"
+#include "Graph.h"
 
 class Interpreter {
 public:
@@ -117,16 +118,6 @@ public:
         int sizeBefore = 0;
         int sizeAfter = 0;
 
-        //debug
-//        cout << "\n///////////////"
-//                "\nshould be:\n"
-//                "b(y) :- a(y).\n"
-//                "  y='1'\n"
-//                "  y='2'\n"
-//                "  y='4'\n"
-//                "b(y) :- a(y).\n"
-//                "//////////////\n\n";
-
         for (auto &fact : dl.Facts) {
             ++numPasses;
             evaluateFact(fact);
@@ -134,17 +125,17 @@ public:
         
         cout << endl << "Schemes populated after " << numPasses
         << " passes through the Rules." << endl << endl;
-        // debug; I dont think this actually goes here but now I can see if it runs
     }
 
-//    string checkForConstant() { // I think I do this already with isID
-//        // test if the first character is a ', if it is then that makes it a constant,
-//        // if not it is a variable
-//    }
+    static Graph makeGraph(const vector<Rule>& rules) {
 
-//    Interpreter (const DatalogProgram &dl) : dl(dl) {
-//
-//    }
+        Graph graph(rules.size());
+        for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
+            Rule fromRule = rules.at(fromID);
+            cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // TODO remove
+        }
+        return graph;
+    }
 };
 
 #endif //CS236PROJECT4_DATALOGINTERPRETER_INTERPRETER_H

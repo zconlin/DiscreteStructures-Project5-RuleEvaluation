@@ -14,8 +14,9 @@ using namespace std;
 class Predicate
 {
 public:
-    Predicate(string value, vector<Parameter> parameterList): parameterList(parameterList), name(value) {}
     Predicate() {}
+    Predicate(string value): name(value) {}
+    Predicate(string value, vector<Parameter> parameterList): parameterList(parameterList), name(value) {}
 
     vector<Parameter> parameterList;
     string name;

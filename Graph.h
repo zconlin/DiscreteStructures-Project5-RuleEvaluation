@@ -5,6 +5,8 @@
 #ifndef CS236PROJECT5_RULEEVALUATION_GRAPH_H
 #define CS236PROJECT5_RULEEVALUATION_GRAPH_H
 
+#include "Node.h"
+
 class Graph {
 
 private:
@@ -25,7 +27,7 @@ public:
     string toString() {
         string output = "";
         for (auto node: nodes) {
-            output += to_string(node.first) + ": " + node.second.toString();
+            output += "R" + to_string(node.first) + ": " + node.second.toString();
         }
     return output;
     }

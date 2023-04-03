@@ -16,14 +16,40 @@
 #include <iostream>
 #include <fstream>
 
-int main() {
-    Graph graph(3);
-    graph.addEdge(1,2);
-    graph.addEdge(1,0);
-    graph.addEdge(0,1);
-    graph.addEdge(1,1);
+int main() { // Part 3
+
+    // predicate names for fake rules
+    // first is name for head predicate
+    // second is names for body predicates
+    pair<string,vector<string>> ruleNames[] = {
+            { "A", { "B" } },
+            { "B", { "B", "A" } },
+    };
+
+    vector<Rule> rules;
+
+    for (auto& rulePair : ruleNames) {
+        string headName = rulePair.first;
+        Rule rule = Rule(Predicate(headName));
+        vector<string> bodyNames = rulePair.second;
+        for (auto& bodyName : bodyNames)
+            rule.addBodyPredicate(Predicate(bodyName));
+        rules.push_back(rule);
+    }
+
+    Graph graph = Interpreter::makeGraph(rules);
     cout << graph.toString();
+
 }
+
+//int main() { // Part 2
+//    Graph graph(3);
+//    graph.addEdge(1,2);
+//    graph.addEdge(1,0);
+//    graph.addEdge(0,1);
+//    graph.addEdge(1,1);
+//    cout << graph.toString();
+//}
 
 //int main() { // Part 1
 //    Node node;
