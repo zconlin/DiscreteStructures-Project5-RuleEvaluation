@@ -23,6 +23,9 @@ public:
 
     string toString() {
         stringstream output;
+        if (predicateList.empty()) {
+            return headPredicate.toString();
+        }
         Predicate savedParameter = predicateList.back();
         predicateList.pop_back();
         output << headPredicate.toString() << " :- ";

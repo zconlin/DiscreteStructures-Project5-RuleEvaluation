@@ -128,7 +128,6 @@ public:
     }
 
     static Graph makeGraph(const vector<Rule>& rules) {
-
         Graph graph(rules.size());
         for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
             Rule fromRule = rules.at(fromID);

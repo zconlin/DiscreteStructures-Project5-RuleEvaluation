@@ -38,14 +38,20 @@ public:
 
     string toString() {
         stringstream output;
-        Parameter savedParameter = parameterList.back();
-        parameterList.pop_back();
-        output << name << "(";
-        for(const auto& i : parameterList) {
-            output << i.value << ",";
+        if (!parameterList.empty()) {
+
+            Parameter savedParameter = parameterList.back();
+            parameterList.pop_back();
+            output << name << "(";
+            for (const auto &i: parameterList) {
+                output << i.value << ",";
+            }
+            output << savedParameter.value << ")";
+            return output.str();
+        } else {
+            output << name << "()";
+            return output.str();
         }
-        output << savedParameter.value << ")";
-        return output.str();
     }
 
 };
