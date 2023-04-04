@@ -26,13 +26,19 @@ public:
         if (predicateList.empty()) {
             return headPredicate.toString();
         }
-        Predicate savedParameter = predicateList.back();
-        predicateList.pop_back();
+//        Predicate savedParameter = predicateList.back();
+//        predicateList.pop_back();
         output << headPredicate.toString() << " :- ";
+        int counter = 0;
         for(auto i : predicateList) {
-            output << i.toString() + ",";
+            if (counter != predicateList.size() - 1) {
+                output << i.toString() + ",";
+                ++counter;
+            } else {
+                output << i.toString();
+            }
         }
-        output << savedParameter.toString();
+//        output << savedParameter.toString();
 
         return output.str();
     }
@@ -42,10 +48,17 @@ public:
         return *this;
     }
 
-    Rule getBodyPredicate() {
-        return *this;
+    Predicate getBodyPredicate(unsigned int i) {
+        return predicateList.at(i);
     }
 
+    unsigned int getSize() {
+        return predicateList.size();
+    }
+
+    Predicate getHeadPredicate() {
+        return headPredicate;
+    }
 
 private:
     string value;

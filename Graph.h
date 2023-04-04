@@ -27,7 +27,7 @@ public:
     string toString() {
         string output = "";
         for (auto node: nodes) {
-            output += "R" + to_string(node.first) + ": " + node.second.toString();
+            output += "R" + to_string(node.first) + ":" + node.second.toString();
         }
     return output;
     }
