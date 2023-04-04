@@ -72,7 +72,7 @@ public:
         }
     }
 
-    Relation evaluateFact(Predicate &predicate) {
+    Relation evaluateRule(Predicate &predicate) {
         Relation rel = db.relations[predicate.getName()];
         map<string, int> mapping;
         vector<string> ordering;
@@ -113,14 +113,12 @@ public:
         return result;
     }
 
-    void evaluateAllFacts() {
+    void evaluateAllRules() {
         int numPasses = 0;
-        int sizeBefore = 0;
-        int sizeAfter = 0;
 
         for (auto &fact : dl.Facts) {
             ++numPasses;
-            evaluateFact(fact);
+            evaluateRule(fact);
         }
         
         cout << endl << "Schemes populated after " << numPasses
@@ -129,6 +127,7 @@ public:
 
     static Graph makeGraph(const vector<Rule>& rules) {
         Graph graph(rules.size());
+        cout << "Dependency Graph" << endl;
         for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
             Rule fromRule = rules.at(fromID);
 //            cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // debug
@@ -144,9 +143,8 @@ public:
                     }
                 }
             }
-
         }
-
+        cout << endl;
         return graph;
     }
 };
