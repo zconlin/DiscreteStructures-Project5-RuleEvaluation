@@ -125,27 +125,29 @@ public:
         << " passes through the Rules." << endl << endl;
     }
 
-    static Graph makeGraph(const vector<Rule>& rules) {
+    static pair<Graph,Graph> makeGraph(const vector<Rule>& rules) {
         Graph graph(rules.size());
+        Graph reverseGraph(rules.size());
         cout << "Dependency Graph" << endl;
         for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
             Rule fromRule = rules.at(fromID);
-//            cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // debug
+            cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // debug
             for (unsigned pred = 0; pred < fromRule.getSize(); pred++) {
                 Predicate bodyPred = fromRule.getBodyPredicate(pred);
-//                cout << "from body predicate: " << bodyPred.toString() << endl; // debug
+                cout << "from body predicate: " << bodyPred.toString() << endl; // debug
                 for (unsigned toID = 0; toID < rules.size(); toID++) {
                     Rule toRule = rules.at(toID);
-//                    cout << "to rule R" << toID << ": " << toRule.toString() << endl; // debug
+                    cout << "to rule R" << toID << ": " << toRule.toString() << endl; // debug
                     if (toRule.getHeadPredicate().getName() == bodyPred.getName()) {
-//                        cout << "dependency found: (R" << fromID << ",R" << toID << ")" << endl; // debug
+                        cout << "dependency found: (R" << fromID << ",R" << toID << ")" << endl; // debug
                         graph.addEdge(fromID, toID);
+                        reverseGraph.addEdge(toID, fromID);
                     }
                 }
             }
         }
         cout << endl;
-        return graph;
+        return {graph, reverseGraph};
     }
 };
 

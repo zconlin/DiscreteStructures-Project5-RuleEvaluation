@@ -16,9 +16,10 @@ private:
     set<int> adjacentNodeIDs;
 
 public:
+    bool visited = false;
 
     void addEdge(int adjacentNodeID) {
-    adjacentNodeIDs.insert(adjacentNodeID);
+        adjacentNodeIDs.insert(adjacentNodeID);
     }
 
     string toString() {
@@ -30,6 +31,10 @@ public:
         output += "\n";
 
         return output;
+    }
+
+    set<int> getAdjacentNodeIDs() {
+        return adjacentNodeIDs;
     }
 };
 

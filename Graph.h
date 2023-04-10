@@ -24,6 +24,22 @@ public:
         nodes[fromNodeID].addEdge(toNodeID);
     }
 
+    static Graph DFS(Graph graph, int node, set<int> order) {
+        Node currentNode = graph.nodes[node];
+        if (currentNode.visited) {
+            return graph;
+        }
+        for (const auto i: order) {
+            if (currentNode.getAdjacentNodeIDs().count(i)) {
+                order.erase(i);
+                Graph subGraph = DFS(graph, i, order);
+                vector<Graph> subGraphs;
+                subGraphs.push_back(subGraph);
+            }
+        }
+        return graph;
+    }
+
     string toString() {
         string output = "";
         for (auto node: nodes) {

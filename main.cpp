@@ -16,41 +16,20 @@
 #include <iostream>
 #include <fstream>
 
-int main (int argc, char* argv[]) {
-    ifstream f;
-    f.open(argv[1]);
-
-    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
-
-    Scanner s = Scanner(content);
-    vector<Token> t = s.scanLoop();
-
-    Parser p = Parser(t);
-
-    try {
-        DatalogProgram dp = p.datalogProgram();
-        Interpreter i = Interpreter(dp);
-
-        cout << "Dependency Graph" << endl;
-//        i.makeGraph();
-
-        cout << "Rule Evaluation" << endl;
-        i.evaluateAllRules();
-
-        cout << "Query Evaluation" << endl;
-        i.evaluateAllQueries();
-    }
-    catch (Token error) {
-//        cout << "Failure!" << endl;
-//        cout << "  " << error.toString() << endl;
-    }
-    return 0;
-}
-
-
-//int main() { // Part 3
+//int main (int argc, char* argv[]) {
+//    ifstream f;
+//    f.open(argv[1]);
 //
-//    // predicate names for fake rules
+//    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
+//
+//    Scanner s = Scanner(content);
+//    vector<Token> t = s.scanLoop();
+//
+//    Parser p = Parser(t);
+//
+//    try {
+
+////         predicate names for fake rules
 //    // first is name for head predicate
 //    // second is names for body predicates
 //    pair<string,vector<string>> ruleNames[] = {
@@ -61,20 +40,56 @@ int main (int argc, char* argv[]) {
 //            { "E", { "E", "F" } },
 //    };
 //
-//    vector<Rule> rules;
+//        vector<Rule> rules;
 //
-//    for (auto& rulePair : ruleNames) {
-//        string headName = rulePair.first;
-//        Rule rule = Rule(Predicate(headName));
-//        vector<string> bodyNames = rulePair.second;
-//        for (auto& bodyName : bodyNames)
-//            rule.addBodyPredicate(Predicate(bodyName));
-//        rules.push_back(rule);
+//        DatalogProgram dp = p.datalogProgram();
+//        Interpreter i = Interpreter(dp);
+//
+//        cout << "Dependency Graph" << endl;
+//        pair<Graph,Graph> graphs = i.makeGraph(rules);
+//
+//        cout << "Rule Evaluation" << endl;
+//        i.evaluateAllRules();
+//
+//        cout << "Query Evaluation" << endl;
+//        i.evaluateAllQueries();
 //    }
-//
-//    Graph graph = Interpreter::makeGraph(rules);
-//    cout << graph.toString();
+//    catch (Token error) {
+////        cout << "Failure!" << endl;
+////        cout << "  " << error.toString() << endl;
+//    }
+//    return 0;
 //}
+
+
+int main() { // Part 3
+
+    // predicate names for fake rules
+    // first is name for head predicate
+    // second is names for body predicates
+    pair<string,vector<string>> ruleNames[] = {
+            { "A", { "B", "C" } },
+            { "B", { "A", "D" } },
+            { "B", { "B" } },
+            { "E", { "F", "G" } },
+            { "E", { "E", "F" } },
+    };
+
+    vector<Rule> rules;
+
+    for (auto& rulePair : ruleNames) {
+        string headName = rulePair.first;
+        Rule rule = Rule(Predicate(headName));
+        vector<string> bodyNames = rulePair.second;
+        for (auto& bodyName : bodyNames)
+            rule.addBodyPredicate(Predicate(bodyName));
+        rules.push_back(rule);
+    }
+
+    pair<Graph,Graph> graphs = Interpreter::makeGraph(rules);
+    cout << graphs.second.toString() << endl;
+    cout << graphs.first.toString() << endl;
+}
 
 //int main() { // Part 2
 //    Graph graph(3);
