@@ -32,20 +32,19 @@ int main (int argc, char* argv[]) {
 //         predicate names for fake rules
     // first is name for head predicate
     // second is names for body predicates
-    pair<string,vector<string>> ruleNames[] = {
-            { "A", { "B", "C" } },
-            { "B", { "A", "D" } },
-            { "B", { "B" } },
-            { "E", { "F", "G" } },
-            { "E", { "E", "F" } },
-    };
+//    pair<string,vector<string>> ruleNames[] = {
+//            { "A", { "B", "C" } },
+//            { "B", { "A", "D" } },
+//            { "B", { "B" } },
+//            { "E", { "F", "G" } },
+//            { "E", { "E", "F" } },
+//    };
 
-        vector<Rule> rules;
+//        vector<Rule> rules;
 
         DatalogProgram dp = p.datalogProgram();
         Interpreter i = Interpreter(dp);
 
-        pair<Graph,Graph> graphs = i.makeGraph(rules);
 
         i.evaluateAllRules();
         i.evaluateAllQueries();
