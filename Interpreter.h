@@ -17,7 +17,6 @@ public:
     Interpreter(const DatalogProgram &program) : dl(program) {
         db = Database(program.Schemes, program.Facts);
     }
-
     ~Interpreter(){}
 
     DatalogProgram dl;
@@ -65,8 +64,9 @@ public:
         return result;
     }
 
-    // call this after schemes and facts, but before queries
     void evaluateAllQueries() {
+        cout << "Query Evaluation" << endl;
+
         for (auto &query : dl.Queries) {
             evaluateQuery(query);
         }
@@ -116,38 +116,56 @@ public:
     void evaluateAllRules() {
         int numPasses = 0;
 
+        cout << "Dependency Graph" << endl;
+        pair<Graph,Graph> graphs = makeGraph(dl.Rules);
+        Graph graph = graphs.first;
+        Graph reverseGraph = graphs.second;
+
+        cout << endl; // debug
+        cout << "Rule Evaluation" << endl;
+
         for (auto &fact : dl.Facts) {
             ++numPasses;
             evaluateRule(fact);
         }
-        
-        cout << endl << "Schemes populated after " << numPasses
-        << " passes through the Rules." << endl << endl;
+
+        vector<int> order;
+        for (int i = 0; i < graph.nodes.size(); i++) {
+            order.push_back(i);
+        }
+        cout << endl; // debug
+//        cout << endl << "Schemes populated after " << numPasses
+//        << " passes through the Rules." << endl << endl;
     }
 
-    static pair<Graph,Graph> makeGraph(const vector<Rule>& rules) {
+     static pair<Graph,Graph> makeGraph(const vector<Rule>& rules) {
         Graph graph(rules.size());
         Graph reverseGraph(rules.size());
-        cout << "Dependency Graph" << endl;
         for (unsigned fromID = 0; fromID < rules.size(); fromID++) {
             Rule fromRule = rules.at(fromID);
-            cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // debug
+            // cout << "from rule R" << fromID << ": " << fromRule.toString() << endl; // debug
+
             for (unsigned pred = 0; pred < fromRule.getSize(); pred++) {
                 Predicate bodyPred = fromRule.getBodyPredicate(pred);
-                cout << "from body predicate: " << bodyPred.toString() << endl; // debug
+                // cout << "from body predicate: " << bodyPred.toString() << endl; // debug
+
                 for (unsigned toID = 0; toID < rules.size(); toID++) {
                     Rule toRule = rules.at(toID);
-                    cout << "to rule R" << toID << ": " << toRule.toString() << endl; // debug
+                    // cout << "to rule R" << toID << ": " << toRule.toString() << endl; // debug
                     if (toRule.getHeadPredicate().getName() == bodyPred.getName()) {
-                        cout << "dependency found: (R" << fromID << ",R" << toID << ")" << endl; // debug
                         graph.addEdge(fromID, toID);
                         reverseGraph.addEdge(toID, fromID);
+                        // cout << "dependency found: (R" << fromID << ",R" << toID << ")" << endl; // debug
                     }
                 }
             }
         }
-        cout << endl;
+        // cout << endl; // debug
         return {graph, reverseGraph};
+    }
+
+    Relation evaluateSCC(const vector<Rule> &rules) {
+        return Relation();
     }
 };
 

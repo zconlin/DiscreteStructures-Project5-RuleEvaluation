@@ -16,54 +16,20 @@
 #include <iostream>
 #include <fstream>
 
-//int main (int argc, char* argv[]) {
-//    ifstream f;
-//    f.open(argv[1]);
-//
-//    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
-//
-//    Scanner s = Scanner(content);
-//    vector<Token> t = s.scanLoop();
-//
-//    Parser p = Parser(t);
-//
-//    try {
-//
-////         predicate names for fake rules
-//    // first is name for head predicate
-//    // second is names for body predicates
-//    pair<string,vector<string>> ruleNames[] = {
-//            { "A", { "B", "C" } },
-//            { "B", { "A", "D" } },
-//            { "B", { "B" } },
-//            { "E", { "F", "G" } },
-//            { "E", { "E", "F" } },
-//    };
-//
-//        vector<Rule> rules;
-//
-//        DatalogProgram dp = p.datalogProgram();
-//        Interpreter i = Interpreter(dp);
-//
-//        cout << "Dependency Graph" << endl;
-//        pair<Graph,Graph> graphs = i.makeGraph(rules);
-//
-//        cout << "Rule Evaluation" << endl;
-//        i.evaluateAllRules();
-//
-//        cout << "Query Evaluation" << endl;
-//        i.evaluateAllQueries();
-//    }
-//    catch (Token error) {
-////        cout << "Failure!" << endl;
-////        cout << "  " << error.toString() << endl;
-//    }
-//    return 0;
-//}
+int main (int argc, char* argv[]) {
+    ifstream f;
+    f.open(argv[1]);
 
+    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
 
-int main() { // Hardcoded test
-    // predicate names for fake rules
+    Scanner s = Scanner(content);
+    vector<Token> t = s.scanLoop();
+
+    Parser p = Parser(t);
+
+    try {
+
+//         predicate names for fake rules
     // first is name for head predicate
     // second is names for body predicates
     pair<string,vector<string>> ruleNames[] = {
@@ -74,26 +40,57 @@ int main() { // Hardcoded test
             { "E", { "E", "F" } },
     };
 
-    vector<Rule> rules;
+        vector<Rule> rules;
 
-    for (auto& rulePair : ruleNames) {
-        string headName = rulePair.first;
-        Rule rule = Rule(Predicate(headName));
-        vector<string> bodyNames = rulePair.second;
-        for (auto& bodyName : bodyNames)
-            rule.addBodyPredicate(Predicate(bodyName));
-        rules.push_back(rule);
+        DatalogProgram dp = p.datalogProgram();
+        Interpreter i = Interpreter(dp);
+
+        pair<Graph,Graph> graphs = i.makeGraph(rules);
+
+        i.evaluateAllRules();
+        i.evaluateAllQueries();
     }
-
-    pair<Graph,Graph> graphs = Interpreter::makeGraph(rules);
-    cout << "Dependency:" << endl << graphs.first.toString() << endl;
-    cout << "Reverse Dependency:" << endl << graphs.second.toString() << endl;
-    Graph dfsGraph = graphs.first.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
-    cout << "DFS:" << endl << dfsGraph.toString() << endl;
-    Graph reverseDfsGraph = graphs.second.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
-    cout << "Reverse DFS:" << endl << reverseDfsGraph.toString() << endl;
-
+    catch (Token error) {
+//        cout << "Failure!" << endl;
+//        cout << "  " << error.toString() << endl;
+    }
+    return 0;
 }
+
+
+//int main() { // Hardcoded test
+//    // predicate names for fake rules
+//    // first is name for head predicate
+//    // second is names for body predicates
+//    pair<string,vector<string>> ruleNames[] = {
+//            { "A", { "B", "C" } },
+//            { "B", { "A", "D" } },
+//            { "B", { "B" } },
+//            { "E", { "F", "G" } },
+//            { "E", { "E", "F" } },
+//    };
+//
+//    vector<Rule> rules;
+//
+//    for (auto& rulePair : ruleNames) {
+//        string headName = rulePair.first;
+//        Rule rule = Rule(Predicate(headName));
+//        vector<string> bodyNames = rulePair.second;
+//        for (auto& bodyName : bodyNames)
+//            rule.addBodyPredicate(Predicate(bodyName));
+//        rules.push_back(rule);
+//    }
+//
+//    pair<Graph,Graph> graphs = Interpreter::makeGraph(rules);
+//    cout << "Dependency:" << endl << graphs.first.toString() << endl; // debug
+//    cout << "Reverse Dependency:" << endl << graphs.second.toString() << endl; // debug
+//    Graph dfsGraph = graphs.first.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
+//    cout << "DFS:" << endl << dfsGraph.toString() << endl; // debug
+//    Graph reverseDfsGraph = graphs.second.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
+//    cout << "Reverse DFS:" << endl << reverseDfsGraph.toString() << endl; // debug
+////    Graph postOrderGraph = graphs.first.dfsForest(1, vector<int> { 0, 1, 2, 3, 4 });
+//
+//}
 
 //int main() { // Part 3
 //
