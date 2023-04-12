@@ -12,10 +12,6 @@ using namespace std;
 
 class Node {
 
-private:
-
-    set<int> adjacentNodeIDs;
-
 public:
     bool visited = false;
     int postorder;
@@ -39,6 +35,8 @@ public:
     set<int> getAdjacentNodeIDs() {
         return adjacentNodeIDs;
     }
+
+    set<int> adjacentNodeIDs;
 };
 
 #endif //CS236PROJECT5_RULEEVALUATION_NODE_H

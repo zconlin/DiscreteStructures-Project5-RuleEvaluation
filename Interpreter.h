@@ -113,29 +113,139 @@ public:
         return result;
     }
 
+//    void evaluateAllRules() {
+//        cout << "Dependency Graph" << endl;
+//        pair<Graph,Graph> graphs = makeGraph(dl.Rules());
+//        Graph forwardGraph = graphs.first;
+//        cout << forwardGraph.toString() << endl;
+//        Graph reverseGraph = graphs.second;
+//        cout << "reverse graph" << endl << reverseGraph.toString() << endl; //debug
+//
+//        cout << "Rule Evaluation" << endl;
+//        vector<int> order = reverseGraph.getPostOrder();
+//        std::reverse(order.begin(), order.end());
+//        vector<Graph> SCCs = forwardGraph.DFSforest(order);
+//
+//        for (const auto &SCC: SCCs) {
+//            int ruleNum = SCC.nodes.begin()->first;
+//            cout << "SCC: R" << ruleNum << endl;
+//
+//            vector<Rule> rules;
+//            for (const auto &[i, node]: SCC.nodes) {
+//                rules.push_back(dl.Rules().at(i));
+//            }
+//
+//            bool changed = true;
+//            int iteration = 0;
+//
+//            if (rules.size() == 1) {
+//                Rule &rule = rules.at(0);
+//                // Check if rule doesn't depend on itself
+//                bool dependent = false;
+//                for (const auto &p: rule.body) {
+//                    if (p.name == rule.headPredicate.name) {
+//                        dependent = true;
+//                        changed = true;
+//                        break;
+//                    }
+//                }
+//                if (!dependent) {
+//                    cout << rule.toString() << endl;
+//                    Relation result = evaluateRule(rule);
+//                    cout << result.toString();
+//
+//                    changed = false;
+//                    iteration = 1;
+//                }
+//            }
+//
+//            while (changed) {
+//                changed = false;
+//                for (const auto &rule: rules) {
+//                    unsigned int before = db.relations[rule.headPredicate.name].getTuples().size();
+//                    cout << rule.toString() << endl;
+//                    Relation result = evaluateRule(rule);
+//                    cout << result.toString();
+//                    if (before != db.relations[rule.headPredicate.name].getTuples().size()) {
+//                        changed = true;
+//                    }
+//                }
+//                ++iteration;
+//            }
+//            cout << iteration << " passes: R" << ruleNum << endl;
+////        cout << endl << "Schemes populated after " << iteration << " passes through the Rules." << endl << endl;
+//
+//        }
+//    }
     void evaluateAllRules() {
-        int numPasses = 0;
 
         cout << "Dependency Graph" << endl;
+
+        if (dl.Rules.empty()) {
+            cout << endl << "Rule Evaluation" << endl;
+            // No rules to evaluate
+            return;
+        }
+
         pair<Graph,Graph> graphs = makeGraph(dl.Rules);
-        Graph graph = graphs.first;
+        Graph forwardGraph = graphs.first;
+        cout << forwardGraph.toString() << endl;
         Graph reverseGraph = graphs.second;
 
-        cout << endl; // debug
         cout << "Rule Evaluation" << endl;
+        vector<int> order = reverseGraph.getPostOrder();
+        std::reverse(order.begin(), order.end());
+        vector<Graph> SCCs = forwardGraph.DFSforest(order);
 
-        for (auto &fact : dl.Facts) {
-            ++numPasses;
-            evaluateRule(fact);
-        }
+        for(auto& SCC : SCCs) {
+            string ruleNum = SCC.nodesToString();
+            cout << "SCC: " << ruleNum << endl;
 
-        vector<int> order;
-        for (int i = 0; i < graph.nodes.size(); i++) {
-            order.push_back(i);
+            vector<Rule> rules;
+            for (const auto& [i, node] : SCC.nodes) {
+                rules.push_back(dl.Rules.at(i));
+            }
+
+            bool changed = true;
+            int iteration = 0;
+
+            if (rules.size() == 1) {
+                Rule& rule = rules.at(0);
+                bool dependent = false;
+                for (const auto& p : rule.predicateList) {
+                    if (p.name == rule.headPredicate.name) {
+                        dependent = true;
+                        changed = true;
+                        break;
+                    }
+                }
+                if (!dependent) {
+                    cout << rule.toString() << endl;
+                    Relation result = evaluateRule(rule);
+                    cout << result.toString();
+
+                    changed = false;
+                    iteration = 1;
+                }
+            }
+
+            while (changed) {
+                changed = false;
+                for (const auto& rule : rules) {
+                    unsigned int before = db.relations[rule.headPredicate.name].getTuples().size();
+                    cout << rule.toString() << endl;
+                    Relation result = evaluateRule(rule);
+                    cout << result.toString();
+                    if (before != db.relations[rule.headPredicate.name].getTuples().size()) {
+                        changed = true;
+                    }
+                }
+                ++iteration;
+            }
+            cout << iteration << " passes: " << ruleNum << endl;
+//        cout << endl << "Schemes populated after " << iteration << " passes through the Rules." << endl << endl;
+
         }
-        cout << endl; // debug
-//        cout << endl << "Schemes populated after " << numPasses
-//        << " passes through the Rules." << endl << endl;
     }
 
      static pair<Graph,Graph> makeGraph(const vector<Rule>& rules) {
