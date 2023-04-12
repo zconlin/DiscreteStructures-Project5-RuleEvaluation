@@ -28,7 +28,7 @@
 //    Parser p = Parser(t);
 //
 //    try {
-
+//
 ////         predicate names for fake rules
 //    // first is name for head predicate
 //    // second is names for body predicates
@@ -62,8 +62,7 @@
 //}
 
 
-int main() { // Part 3
-
+int main() { // Hardcoded test
     // predicate names for fake rules
     // first is name for head predicate
     // second is names for body predicates
@@ -87,9 +86,43 @@ int main() { // Part 3
     }
 
     pair<Graph,Graph> graphs = Interpreter::makeGraph(rules);
-    cout << graphs.second.toString() << endl;
-    cout << graphs.first.toString() << endl;
+    cout << "Dependency:" << endl << graphs.first.toString() << endl;
+    cout << "Reverse Dependency:" << endl << graphs.second.toString() << endl;
+    Graph dfsGraph = graphs.first.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
+    cout << "DFS:" << endl << dfsGraph.toString() << endl;
+    Graph reverseDfsGraph = graphs.second.dfs(1, vector<int> { 0, 1, 2, 3, 4 });
+    cout << "Reverse DFS:" << endl << reverseDfsGraph.toString() << endl;
+
 }
+
+//int main() { // Part 3
+//
+//    // predicate names for fake rules
+//    // first is name for head predicate
+//    // second is names for body predicates
+//    pair<string,vector<string>> ruleNames[] = {
+//            { "A", { "B", "C" } },
+//            { "B", { "A", "D" } },
+//            { "B", { "B" } },
+//            { "E", { "F", "G" } },
+//            { "E", { "E", "F" } },
+//    };
+//
+//    vector<Rule> rules;
+//
+//    for (auto& rulePair : ruleNames) {
+//        string headName = rulePair.first;
+//        Rule rule = Rule(Predicate(headName));
+//        vector<string> bodyNames = rulePair.second;
+//        for (auto& bodyName : bodyNames)
+//            rule.addBodyPredicate(Predicate(bodyName));
+//        rules.push_back(rule);
+//    }
+//
+//    Graph graph = Interpreter::makeGraph(rules);
+//    cout << graph.toString();
+//
+//}
 
 //int main() { // Part 2
 //    Graph graph(3);

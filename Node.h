@@ -8,6 +8,7 @@
 using namespace std;
 #include <set>
 #include <iostream>
+#include <stack>
 
 class Node {
 
@@ -17,6 +18,8 @@ private:
 
 public:
     bool visited = false;
+    int postorder;
+    stack<int> postorderStack;
 
     void addEdge(int adjacentNodeID) {
         adjacentNodeIDs.insert(adjacentNodeID);
