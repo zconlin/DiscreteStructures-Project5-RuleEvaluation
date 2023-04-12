@@ -177,6 +177,7 @@ public:
 //
 //        }
 //    }
+
     void evaluateAllRules() {
 
         cout << "Dependency Graph" << endl;
